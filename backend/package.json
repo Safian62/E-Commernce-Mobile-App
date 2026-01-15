@@ -17,6 +17,7 @@
     "cloudinary": "^2.8.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
+    "expo-ecommerce": "file:..",
     "express": "^5.1.0",
     "inngest": "^3.46.0",
     "jsonwebtoken": "^9.0.3",

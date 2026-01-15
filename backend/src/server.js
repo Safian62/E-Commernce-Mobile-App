@@ -59,9 +59,13 @@ app.get("/api/health", (req, res) => {
 //   });
 // }
 
-const startServer = async () => {
-  await connectDB();
-  app.listen(ENV.PORT);
-};
+// const startServer = async () => {
+//   await connectDB();
+//   app.listen(ENV.PORT);
+// };
 
-startServer();
+// startServer();
+
+await connectDB();
+
+export default app;
