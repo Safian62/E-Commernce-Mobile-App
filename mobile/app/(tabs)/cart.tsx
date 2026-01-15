@@ -70,14 +70,12 @@ const CartScreen = () => {
       return;
     }
 
-    // show address selection modal
     setAddressModalVisible(true);
   };
 
   const handleProceedWithPayment = async (selectedAddress: Address) => {
     setAddressModalVisible(false);
 
-    // log chechkout initiated
     Sentry.logger.info("Checkout initiated", {
       itemCount: cartItemCount,
       total: total.toFixed(2),
@@ -87,7 +85,6 @@ const CartScreen = () => {
     try {
       setPaymentLoading(true);
 
-      // create payment intent with cart items and shipping address
       const { data } = await api.post("/payment/create-intent", {
         cartItems,
         shippingAddress: {

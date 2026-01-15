@@ -1,4 +1,3 @@
-import { UserButton } from "@clerk/clerk-react";
 import { useLocation } from "react-router";
 
 import {
@@ -32,9 +31,7 @@ function Navbar() {
         </h1>
       </div>
 
-      <div className="mr-5">
-        <UserButton />
-      </div>
+      <div className="mr-5" />
     </div>
   );
 }

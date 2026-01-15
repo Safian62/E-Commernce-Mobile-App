@@ -5,15 +5,9 @@ import App from "./App.jsx";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { ClerkProvider } from "@clerk/clerk-react";
 import { BrowserRouter } from "react-router";
 import * as Sentry from "@sentry/react";
-
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
-}
+import { AuthProvider } from "./context/AuthContext.jsx";
 
 const queryClient = new QueryClient();
 
@@ -26,18 +20,18 @@ Sentry.init({
 
   integrations: [Sentry.replayIntegration()],
   // Session Replay
-  replaysSessionSampleRate: 1.0, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+  replaysSessionSampleRate: 1.0,
   replaysOnErrorSampleRate: 1.0,
 });
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
           <App />
-        </QueryClientProvider>
-      </ClerkProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   </StrictMode>
 );

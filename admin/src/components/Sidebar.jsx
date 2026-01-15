@@ -1,11 +1,11 @@
-import { useUser } from "@clerk/clerk-react";
 import { ShoppingBagIcon } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { NAVIGATION } from "./Navbar";
+import { useAuth } from "../context/AuthContext.jsx";
 
 function Sidebar() {
   const location = useLocation();
-  const { user } = useUser();
+  const { user, logout } = useAuth();
 
   return (
     <div className="drawer-side is-drawer-close:overflow-visible">
@@ -41,21 +41,27 @@ function Sidebar() {
         </ul>
 
         <div className="p-4 w-full">
-          <div className="flex items-center gap-3">
-            <div className="avatar shrink-0">
-              <img src={user?.imageUrl} alt={user?.name} className="w-10 h-10 rounded-full" />
-            </div>
+          {user && (
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="avatar shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-primary text-primary-content flex items-center justify-center uppercase">
+                    {user.name?.charAt(0) || "A"}
+                  </div>
+                </div>
 
-            <div className="flex-1 min-w-0 is-drawer-close:hidden">
-              <p className="text-sm font-semibold truncate">
-                {user?.firstName} {user?.lastName}
-              </p>
+                <div className="flex-1 min-w-0 is-drawer-close:hidden">
+                  <p className="text-sm font-semibold truncate">{user.name}</p>
 
-              <p className="text-xs opacity-60 truncate">
-                {user?.emailAddresses?.[0]?.emailAddress}
-              </p>
+                  <p className="text-xs opacity-60 truncate">{user.email}</p>
+                </div>
+              </div>
+
+              <button type="button" className="btn btn-ghost btn-xs is-drawer-close:hidden" onClick={logout}>
+                Logout
+              </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

@@ -24,7 +24,6 @@ export async function createOrder(req, res) {
 
     const order = await Order.create({
       user: user._id,
-      clerkId: user.clerkId,
       orderItems,
       shippingAddress,
       paymentResult,
@@ -47,7 +46,7 @@ export async function createOrder(req, res) {
 
 export async function getUserOrders(req, res) {
   try {
-    const orders = await Order.find({ clerkId: req.user.clerkId })
+    const orders = await Order.find({ user: req.user._id })
       .populate("orderItems.product")
       .sort({ createdAt: -1 });
 

@@ -41,19 +41,19 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
     },
     name: {
+      type: String,
+      required: true,
+    },
+    passwordHash: {
       type: String,
       required: true,
     },
     imageUrl: {
       type: String,
       default: "",
-    },
-    clerkId: {
-      type: String,
-      unique: true,
-      required: true,
     },
     stripeCustomerId: {
       type: String,

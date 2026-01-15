@@ -40,7 +40,6 @@ export async function createProduct(req, res) {
 
     res.status(201).json(product);
   } catch (error) {
-    console.error("Error creating product", error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
@@ -51,7 +50,6 @@ export async function getAllProducts(_, res) {
     const products = await Product.find().sort({ createdAt: -1 });
     res.status(200).json(products);
   } catch (error) {
-    console.error("Error fetching products:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
@@ -91,7 +89,6 @@ export async function updateProduct(req, res) {
     await product.save();
     res.status(200).json(product);
   } catch (error) {
-    console.error("Error updating products:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
@@ -105,7 +102,6 @@ export async function getAllOrders(_, res) {
 
     res.status(200).json({ orders });
   } catch (error) {
-    console.error("Error in getAllOrders controller:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -138,7 +134,6 @@ export async function updateOrderStatus(req, res) {
 
     res.status(200).json({ message: "Order status updated successfully", order });
   } catch (error) {
-    console.error("Error in updateOrderStatus controller:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -148,7 +143,6 @@ export async function getAllCustomers(_, res) {
     const customers = await User.find().sort({ createdAt: -1 }); // latest user first
     res.status(200).json({ customers });
   } catch (error) {
-    console.error("Error fetching customers:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -178,7 +172,6 @@ export async function getDashboardStats(_, res) {
       totalProducts,
     });
   } catch (error) {
-    console.error("Error fetching dashboard stats:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -205,7 +198,6 @@ export const deleteProduct = async (req, res) => {
     await Product.findByIdAndDelete(id);
     res.status(200).json({ message: "Product deleted successfully" });
   } catch (error) {
-    console.error("Error deleting product:", error);
     res.status(500).json({ message: "Failed to delete product" });
   }
 };

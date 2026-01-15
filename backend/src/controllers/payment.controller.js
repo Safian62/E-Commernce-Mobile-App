@@ -60,7 +60,6 @@ export async function createPaymentIntent(req, res) {
         email: user.email,
         name: user.name,
         metadata: {
-          clerkId: user.clerkId,
           userId: user._id.toString(),
         },
       });
@@ -78,7 +77,6 @@ export async function createPaymentIntent(req, res) {
         enabled: true,
       },
       metadata: {
-        clerkId: user.clerkId,
         userId: user._id.toString(),
         orderItems: JSON.stringify(validatedItems),
         shippingAddress: JSON.stringify(shippingAddress),
@@ -89,7 +87,6 @@ export async function createPaymentIntent(req, res) {
 
     res.status(200).json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
-    console.error("Error creating payment intent:", error);
     res.status(500).json({ error: "Failed to create payment intent" });
   }
 }
@@ -101,29 +98,23 @@ export async function handleWebhook(req, res) {
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, ENV.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error("Webhook signature verification failed:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   if (event.type === "payment_intent.succeeded") {
     const paymentIntent = event.data.object;
 
-    console.log("Payment succeeded:", paymentIntent.id);
-
     try {
-      const { userId, clerkId, orderItems, shippingAddress, totalPrice } = paymentIntent.metadata;
+      const { userId, orderItems, shippingAddress, totalPrice } = paymentIntent.metadata;
 
-      // Check if order already exists (prevent duplicates)
       const existingOrder = await Order.findOne({ "paymentResult.id": paymentIntent.id });
       if (existingOrder) {
-        console.log("Order already exists for payment:", paymentIntent.id);
         return res.json({ received: true });
       }
 
       // create order
       const order = await Order.create({
         user: userId,
-        clerkId,
         orderItems: JSON.parse(orderItems),
         shippingAddress: JSON.parse(shippingAddress),
         paymentResult: {
@@ -133,17 +124,14 @@ export async function handleWebhook(req, res) {
         totalPrice: parseFloat(totalPrice),
       });
 
-      // update product stock
       const items = JSON.parse(orderItems);
       for (const item of items) {
         await Product.findByIdAndUpdate(item.product, {
           $inc: { stock: -item.quantity },
         });
       }
-
-      console.log("Order created successfully:", order._id);
     } catch (error) {
-      console.error("Error creating order from webhook:", error);
+      // Silently handle webhook processing errors
     }
   }
 

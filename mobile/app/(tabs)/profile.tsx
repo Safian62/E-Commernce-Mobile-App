@@ -1,10 +1,10 @@
 import SafeScreen from "@/components/SafeScreen";
-import { useAuth, useUser } from "@clerk/clerk-expo";
 
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 
 const MENU_ITEMS = [
   { id: 1, icon: "person-outline", title: "Edit Profile", color: "#3B82F6", action: "/profile" },
@@ -14,8 +14,7 @@ const MENU_ITEMS = [
 ] as const;
 
 const ProfileScreen = () => {
-  const { signOut } = useAuth();
-  const { user } = useUser();
+  const { user, logout } = useAuth();
 
   const handleMenuPress = (action: (typeof MENU_ITEMS)[number]["action"]) => {
     if (action === "/profile") return;
@@ -34,11 +33,19 @@ const ProfileScreen = () => {
           <View className="bg-surface rounded-3xl p-6">
             <View className="flex-row items-center">
               <View className="relative">
-                <Image
-                  source={user?.imageUrl}
-                  style={{ width: 80, height: 80, borderRadius: 40 }}
-                  transition={200}
-                />
+                {user?.imageUrl ? (
+                  <Image
+                    source={user.imageUrl}
+                    style={{ width: 80, height: 80, borderRadius: 40 }}
+                    transition={200}
+                  />
+                ) : (
+                  <View className="w-20 h-20 rounded-full bg-primary items-center justify-center">
+                    <Text className="text-xl font-bold text-black">
+                      {user?.name?.charAt(0) || "U"}
+                    </Text>
+                  </View>
+                )}
                 <View className="absolute -bottom-1 -right-1 bg-primary rounded-full size-7 items-center justify-center border-2 border-surface">
                   <Ionicons name="checkmark" size={16} color="#121212" />
                 </View>
@@ -46,10 +53,10 @@ const ProfileScreen = () => {
 
               <View className="flex-1 ml-4">
                 <Text className="text-text-primary text-2xl font-bold mb-1">
-                  {user?.firstName} {user?.lastName}
+                  {user?.name}
                 </Text>
                 <Text className="text-text-secondary text-sm">
-                  {user?.emailAddresses?.[0]?.emailAddress || "No email"}
+                  {user?.email || "No email"}
                 </Text>
               </View>
             </View>
@@ -110,7 +117,7 @@ const ProfileScreen = () => {
         <TouchableOpacity
           className="mx-6 mb-3 bg-surface rounded-2xl py-5 flex-row items-center justify-center border-2 border-red-500/20"
           activeOpacity={0.8}
-          onPress={() => signOut()}
+          onPress={logout}
         >
           <Ionicons name="log-out-outline" size={22} color="#EF4444" />
           <Text className="text-red-500 font-bold text-base ml-2">Sign Out</Text>

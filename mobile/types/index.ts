@@ -14,7 +14,6 @@ export interface Product {
 
 export interface User {
   _id: string;
-  clerkId: string;
   email: string;
   name: string;
   imageUrl: string;
@@ -39,7 +38,6 @@ export interface Address {
 export interface Order {
   _id: string;
   user: string;
-  clerkId: string;
   orderItems: OrderItem[];
   shippingAddress: {
     fullName: string;
@@ -88,7 +86,6 @@ export interface CartItem {
 export interface Cart {
   _id: string;
   user: string;
-  clerkId: string;
   items: CartItem[];
   createdAt: string;
   updatedAt: string;
