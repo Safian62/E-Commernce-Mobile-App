@@ -222,7 +222,7 @@ const ProductDetailScreen = () => {
               <>
                 <Ionicons name="cart" size={24} color={!inStock ? "#666" : "#121212"} />
                 <Text
-                  className={`font-bold text-lg ml-2 ${
+                  className={`font-bold ml-2 ${
                     !inStock ? "text-text-secondary" : "text-background"
                   }`}
                 >

@@ -18,7 +18,6 @@ import { Image } from "expo-image";
 import OrderSummary from "@/components/OrderSummary";
 import AddressSelectionModal from "@/components/AddressSelectionModal";
 
-// import * as Sentry from "@sentry/react-native";
 
 const CartScreen = () => {
   const api = useApi();
@@ -43,8 +42,8 @@ const CartScreen = () => {
 
   const cartItems = cart?.items || [];
   const subtotal = cartTotal;
-  const shipping = 10.0; // $10 shipping fee
-  const tax = subtotal * 0.08; // 8% tax
+  const shipping = 10.0; 
+  const tax = subtotal * 0.08; 
   const total = subtotal + shipping + tax;
 
   const handleQuantityChange = (
@@ -71,7 +70,6 @@ const CartScreen = () => {
   const handleCheckout = () => {
     if (cartItems.length === 0) return;
 
-    // check if user has addresses
     if (!addresses || addresses.length === 0) {
       Alert.alert(
         "No Address",
@@ -87,11 +85,7 @@ const CartScreen = () => {
   const handleProceedWithPayment = async (selectedAddress: Address) => {
     setAddressModalVisible(false);
 
-    // Sentry.logger.info("Checkout initiated", {
-    //   itemCount: cartItemCount,
-    //   total: total.toFixed(2),
-    //   city: selectedAddress.city,
-    // });
+ 
     try {
       setPaymentLoading(true);
 
@@ -150,11 +144,12 @@ const CartScreen = () => {
 
         // map cart items to the order item schema expected by the backend
         const orderItems = cartItems.map((item) => ({
-          product: item.product?._id ?? item.product,
+          // ensure `product` is an object with `_id` so backend validation finds the product
+          product: { _id: item.product?._id ?? item.product },
           name: item.product?.name ?? "",
           price: item.product?.price ?? 0,
           quantity: item.quantity,
-          image: Array.isArray(item.product?.images) ? item.product.images[0] : item.product?.image ?? "",
+          image: Array.isArray(item.product?.images) ? item.product.images[0] : item.product?.images ?? "",
         }));
 
         const { data } = await api.post("/orders", {
