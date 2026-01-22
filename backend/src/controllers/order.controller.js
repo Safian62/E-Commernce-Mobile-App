@@ -4,6 +4,13 @@ import { Review } from "../models/review.model.js";
 
 export async function createOrder(req, res) {
   try {
+    console.log("createOrder called", {
+      url: req.originalUrl,
+      method: req.method,
+      user: req.user ? { id: req.user._id, email: req.user.email } : null,
+      bodyKeys: Object.keys(req.body || {}),
+    });
+
     const user = req.user;
     const { orderItems, shippingAddress, paymentResult, totalPrice } = req.body;
 

@@ -40,7 +40,16 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.anonymous.mobile",
+          "enableGooglePay": false
+        }
+      ],
+      "expo-secure-store",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,

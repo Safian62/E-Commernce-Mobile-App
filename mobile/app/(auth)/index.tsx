@@ -30,7 +30,6 @@ const AuthScreen = () => {
         });
       }
     } catch (err: any) {
-      // eslint-disable-next-line no-console
       console.error("Auth error", err);
       setError(err?.response?.data?.message || "Something went wrong. Please try again.");
     } finally {

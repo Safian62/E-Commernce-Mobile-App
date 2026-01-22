@@ -175,7 +175,7 @@ const AddressFormModal = ({
                 {isAddingAddress || isUpdatingAddress ? (
                   <ActivityIndicator size="small" color="#121212" />
                 ) : (
-                  <Text className="text-background font-bold text-lg">
+                  <Text className="text-background font-bold">
                     {isEditing ? "Save Changes" : "Add Address"}
                   </Text>
                 )}

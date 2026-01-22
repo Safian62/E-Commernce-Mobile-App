@@ -43,7 +43,7 @@ const VerifyOTPScreen = () => {
       <View className="w-full max-w-sm">
         <Text className="text-2xl font-bold text-center mb-2">Verify Your Email</Text>
         <Text className="text-gray-600 text-center mb-6">
-          We've sent a 6-digit verification code to{"\n"}
+          We&apos;ve sent a 6-digit verification code to{"\n"}
           <Text className="font-semibold">{Array.isArray(email) ? email[0] : email}</Text>
         </Text>
 
